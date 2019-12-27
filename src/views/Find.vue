@@ -2,7 +2,7 @@
     <div class="find">
         发现页面
 
-        <BaseTabbar />
+        <BaseTabbar :actived="1"/>
     </div>
 </template>
 

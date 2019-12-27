@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    主页
-    <BaseTabbar />
+    <router-view />
+    <BaseTabbar :actived="0"/>
   </div>
 </template>
 
@@ -10,3 +10,8 @@ export default {
   name: "home"
 };
 </script>
+
+<style lang="scss" scoped>
+.home {
+}
+</style>

@@ -1,9 +1,20 @@
 <template>
   <div class="mine">
     <div class="header">
-      <van-cell is-link to="/login" class="cell">
-        <template slot="title">
-          <img src="../assets/logo2.png" alt="logo" class="logo" />
+      <van-cell is-link @click="goLogin" class="cell">
+        <template slot="title" v-if="user">
+          <img :src="formatImage(user.avatar)" alt="logo" class="logo" />
+          <div class="content">
+            <div class="title">{{user.username}}</div>
+            <div class="tip">
+              <img src="../assets/mobile.svg" alt="mobile" />
+              {{user.mobile}}
+            </div>
+          </div>
+        </template>
+
+        <template slot="title" v-else>
+          <img src="../assets/logo.png" alt="logo" class="logo" />
           <div class="content">
             <div class="title">登录/注册</div>
             <div class="tip">
@@ -53,7 +64,7 @@
       </div>
     </div>
 
-    <BaseTabbar />
+    <BaseTabbar :actived="3"/>
   </div>
 </template>
 
@@ -64,10 +75,12 @@ import share from "@/assets/share.svg";
 import customer from "@/assets/customer.svg";
 import download from "@/assets/download.svg";
 import rule from "@/assets/rule.svg";
+import { mapState, mapMutations } from "vuex";
+import axios from "axios";
 export default {
   name: "mine",
-  mounted(){
-    console.log(this)
+  computed: {
+    ...mapState(["user_id", "user", "isLogin"])
   },
   data() {
     return {
@@ -84,6 +97,27 @@ export default {
         ]
       ]
     };
+  },
+  created() {
+    if (this.user_id > 0) { // 表示登录
+      this.getUser();
+    }
+  },
+  methods: {
+    ...mapMutations(["setUser"]),
+    getUser() {
+      axios.get(`/api/restapi/eus/v3/users/${this.user_id}`).then(res => {
+        // console.log(res);
+        this.setUser(res.data);
+      });
+    },
+    goLogin() {
+      if (this.isLogin) {
+        this.$router.push("/logout");
+      } else {
+        this.auth("/login", "/mine");
+      }
+    }
   }
 };
 </script>
@@ -134,11 +168,11 @@ export default {
   .row {
     font-size: 3.2vw;
     background-color: #fff;
-    .col{
-      border-right: .13vw solid #eee;
+    .col {
+      border-right: 0.13vw solid #eee;
     }
     .van-col {
-      border-bottom: .13vw solid #eee;
+      border-bottom: 0.13vw solid #eee;
       height: 22.4vw;
       display: flex;
       flex-direction: column;
@@ -160,8 +194,8 @@ export default {
     .nav2,
     .nav3 {
       margin-bottom: 3vw;
-      border-top: .13vw solid #eee;
-      border-bottom: .13vw solid #eee;
+      border-top: 0.13vw solid #eee;
+      border-bottom: 0.13vw solid #eee;
     }
     .icon {
       width: 4.8vw;

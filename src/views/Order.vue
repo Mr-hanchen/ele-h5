@@ -1,7 +1,7 @@
 <template>
     <div class="order">
         订单页面
-        <BaseTabbar />
+        <BaseTabbar :actived="2"/>
     </div>
 </template>
 

@@ -9,8 +9,24 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      component: Home,
+      children: [
+        {
+          path: '',
+          name: "index",
+          component: () => import('../views/Index.vue')
+        },
+        {
+          path: 'selectAddress',
+          name: 'selectAddress',
+          component: () => import('../views/SelectAddress.vue')
+        },
+        {
+          path: 'selectCity',
+          name: 'selectCity',
+          component: () => import('../views/SelectCity.vue')
+        }
+      ]
     },
     {
       path: '/find',
@@ -31,6 +47,11 @@ const router = new VueRouter({
       path: '/login',
       name: 'login',
       component: () => import('../views/Login.vue')
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: () => import('../views/Logout.vue')
     },
     {
       path: '/coin',

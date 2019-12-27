@@ -41,6 +41,19 @@ requireComponent.keys().forEach(fileName => {
 // 全局混入
 Vue.mixin({
   methods: {
+    // 根据ele api返回的imghash值，转换成正确的图片路径
+    // 比如：返回的imghash值是470e35d29132c704a04a549b137a3409jpeg
+    // 处理后则返回https://fuss10.elemecdn.com/4/70/e35d29132c704a04a549b137a3409jpeg.jpeg
+    formatImage(imghash) {
+      if (!imghash) {
+        return "";
+      }
+      var s1 = imghash.slice(0, 1); // 截取第1个字符 比如： 4
+      var s2 = imghash.slice(1, 3); // 截取第2-3个字符 比如： 70
+      var s3 = imghash.slice(3);    // 截取从第3个字符后的所有字符 比如：e35d29132c704a04a549b137a3409jpeg
+      var s4 = imghash.slice(32);   // 截取从第32个字符后的所有字符，取图片后缀名, 比如： jpeg
+      return `https://fuss10.elemecdn.com/${s1}/${s2}/${s3}.${s4}`;
+    },
     auth(path, returnURL) {
       if (!store.state.isLogin) {
         router.push(`/login?returnURL=${returnURL}`);
